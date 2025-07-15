@@ -40,7 +40,7 @@ func seedData(db *gorm.DB) {
 			RoundNumber:  1,
 			CircuitName:  "Bahrain International Circuit",
 			Winner:       "Max Verstappen",
-			PosterURL:    "https://cdn-1.motorsport.com/images/mgl/YEQBjQ20/s8/max-verstappen-red-bull-racing-rb20.jpg",
+			PosterURL:    "",
 		},
 		{
 			SeasonID:     season2024.ID,
@@ -50,7 +50,7 @@ func seedData(db *gorm.DB) {
 			RoundNumber:  2,
 			CircuitName:  "Jeddah Corniche Circuit",
 			Winner:       "Max Verstappen",
-			PosterURL:    "https://cdn-1.motorsport.com/images/mgl/2eABXqd0/s8/max-verstappen-red-bull-racing-rb20.jpg",
+			PosterURL:    "",
 		},
 		{
 			SeasonID:     season2024.ID,
@@ -60,7 +60,7 @@ func seedData(db *gorm.DB) {
 			RoundNumber:  3,
 			CircuitName:  "Albert Park Circuit",
 			Winner:       "Carlos Sainz",
-			PosterURL:    "https://cdn-1.motorsport.com/images/mgl/01WdpL42/s8/carlos-sainz-jr-ferrari-sf-24.jpg",
+			PosterURL:    "",
 		},
 		{
 			SeasonID:     season2024.ID,
@@ -70,7 +70,7 @@ func seedData(db *gorm.DB) {
 			RoundNumber:  4,
 			CircuitName:  "Suzuka International Racing Course",
 			Winner:       "Max Verstappen",
-			PosterURL:    "https://cdn-1.motorsport.com/images/mgl/68yN1Jd6/s8/max-verstappen-red-bull-racing-rb20.jpg",
+			PosterURL:    "",
 		},
 		{
 			SeasonID:     season2024.ID,
@@ -80,7 +80,7 @@ func seedData(db *gorm.DB) {
 			RoundNumber:  5,
 			CircuitName:  "Shanghai International Circuit",
 			Winner:       "Max Verstappen",
-			PosterURL:    "https://cdn-1.motorsport.com/images/mgl/6zQxdyO0/s8/max-verstappen-red-bull-racing-rb20.jpg",
+			PosterURL:    "",
 		},
 		{
 			SeasonID:     season2024.ID,
@@ -90,7 +90,7 @@ func seedData(db *gorm.DB) {
 			RoundNumber:  6,
 			CircuitName:  "Miami International Autodrome",
 			Winner:       "Lando Norris",
-			PosterURL:    "https://cdn-1.motorsport.com/images/mgl/YMdLaZ76/s8/lando-norris-mclaren-mcl38.jpg",
+			PosterURL:    "",
 		},
 		{
 			SeasonID:     season2024.ID,
@@ -100,7 +100,7 @@ func seedData(db *gorm.DB) {
 			RoundNumber:  7,
 			CircuitName:  "Autodromo Enzo e Dino Ferrari",
 			Winner:       "Max Verstappen",
-			PosterURL:    "https://cdn-1.motorsport.com/images/mgl/0L1BVj90/s8/max-verstappen-red-bull-racing-rb20.jpg",
+			PosterURL:    "",
 		},
 		{
 			SeasonID:     season2024.ID,
@@ -110,7 +110,7 @@ func seedData(db *gorm.DB) {
 			RoundNumber:  8,
 			CircuitName:  "Circuit de Monaco",
 			Winner:       "Charles Leclerc",
-			PosterURL:    "https://cdn-1.motorsport.com/images/mgl/YW7BVA42/s8/charles-leclerc-ferrari-sf-24.jpg",
+			PosterURL:    "",
 		},
 		{
 			SeasonID:     season2024.ID,
@@ -120,7 +120,7 @@ func seedData(db *gorm.DB) {
 			RoundNumber:  9,
 			CircuitName:  "Circuit Gilles-Villeneuve",
 			Winner:       "Max Verstappen",
-			PosterURL:    "https://cdn-1.motorsport.com/images/mgl/YW7BVA40/s8/max-verstappen-red-bull-racing-rb20.jpg",
+			PosterURL:    "",
 		},
 		{
 			SeasonID:     season2024.ID,
@@ -130,7 +130,7 @@ func seedData(db *gorm.DB) {
 			RoundNumber:  10,
 			CircuitName:  "Circuit de Barcelona-Catalunya",
 			Winner:       "Max Verstappen",
-			PosterURL:    "https://cdn-1.motorsport.com/images/mgl/2eABXqd2/s8/max-verstappen-red-bull-racing-rb20.jpg",
+			PosterURL:    "",
 		},
 	}
 
@@ -152,7 +152,7 @@ func seedData(db *gorm.DB) {
 			RoundNumber:  1,
 			CircuitName:  "Bahrain International Circuit",
 			Winner:       "Max Verstappen",
-			PosterURL:    "https://cdn-1.motorsport.com/images/mgl/YEQBjQ2Y/s8/max-verstappen-red-bull-racing-rb19.jpg",
+			PosterURL:    "",
 		},
 		{
 			SeasonID:     season2023.ID,
@@ -162,7 +162,7 @@ func seedData(db *gorm.DB) {
 			RoundNumber:  2,
 			CircuitName:  "Jeddah Corniche Circuit",
 			Winner:       "Sergio Perez",
-			PosterURL:    "https://cdn-1.motorsport.com/images/mgl/01WdpLv2/s8/sergio-perez-red-bull-racing-rb19.jpg",
+			PosterURL:    "",
 		},
 		{
 			SeasonID:     season2023.ID,
@@ -172,7 +172,7 @@ func seedData(db *gorm.DB) {
 			RoundNumber:  3,
 			CircuitName:  "Albert Park Circuit",
 			Winner:       "Max Verstappen",
-			PosterURL:    "https://cdn-1.motorsport.com/images/mgl/6zQxdyOY/s8/max-verstappen-red-bull-racing-rb19.jpg",
+			PosterURL:    "",
 		},
 		{
 			SeasonID:     season2023.ID,
@@ -182,7 +182,7 @@ func seedData(db *gorm.DB) {
 			RoundNumber:  4,
 			CircuitName:  "Baku City Circuit",
 			Winner:       "Sergio Perez",
-			PosterURL:    "https://cdn-1.motorsport.com/images/mgl/68yN1JdY/s8/sergio-perez-red-bull-racing-rb19.jpg",
+			PosterURL:    "",
 		},
 		{
 			SeasonID:     season2023.ID,
@@ -192,7 +192,7 @@ func seedData(db *gorm.DB) {
 			RoundNumber:  5,
 			CircuitName:  "Miami International Autodrome",
 			Winner:       "Max Verstappen",
-			PosterURL:    "https://cdn-1.motorsport.com/images/mgl/0L1BVj9Y/s8/max-verstappen-red-bull-racing-rb19.jpg",
+			PosterURL:    "",
 		},
 	}
 
