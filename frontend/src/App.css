@@ -1,0 +1,755 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#root {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(180deg, #14181c 0%, #1a1f23 100%);
+  color: #9ab;
+  line-height: 1.5;
+  min-height: 100vh;
+  display: block !important;
+  place-items: unset !important;
+}
+
+.app {
+  min-height: 100vh;
+  background: #14181c;
+  width: 100%;
+}
+
+.main-content {
+  width: 100%;
+  padding: 0;
+}
+
+/* Header - Letterboxd Style */
+.header {
+  background: #14181c;
+  border-bottom: 1px solid #2c3440;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  gap: 32px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #00c030;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+
+/* Search Bar */
+.search-container {
+  flex: 1;
+  max-width: 400px;
+  margin: 0 20px;
+}
+
+.search-form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #1f2937;
+  border: 1px solid #2c3440;
+  border-radius: 20px;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.search-form:focus-within {
+  background: #14181c;
+  border-color: #00c030;
+  box-shadow: 0 0 0 2px rgba(0, 192, 48, 0.2);
+}
+
+.search-icon {
+  color: #9ab;
+  padding: 8px 12px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.search-form:focus-within .search-icon {
+  color: #00c030;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  padding: 8px 12px 8px 0;
+  font-size: 14px;
+  font-family: inherit;
+  width: 100%;
+  outline: none;
+  flex: 1;
+}
+
+.search-input::placeholder {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.search-input:focus::placeholder {
+  color: #4b5563;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  align-items: center;
+}
+
+.nav-links a {
+  color: #9ab;
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 14px;
+  transition: color 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nav-links a:hover {
+  color: #00c030;
+}
+
+.write-review-btn {
+  background: #00c030 !important;
+  color: #fff !important;
+  padding: 8px 16px !important;
+  border-radius: 4px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+}
+
+.write-review-btn:hover {
+  background: #00a028 !important;
+  transform: translateY(-1px);
+}
+
+.profile-link {
+  color: #00c030 !important;
+  font-weight: 500 !important;
+}
+
+.sign-out-btn {
+  background: transparent;
+  border: 1px solid #2c3440;
+  color: #9ab;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: inherit;
+}
+
+.sign-out-btn:hover {
+  background: #2c3440;
+  color: #fff;
+  border-color: #00c030;
+}
+
+/* Home Page Hero */
+.hero-section {
+  text-align: center;
+  padding: 60px 20px 40px;
+  background: linear-gradient(135deg, #14181c 0%, #1f2937 100%);
+  width: 100%;
+}
+
+.hero-title {
+  font-size: 48px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+
+.hero-subtitle {
+  font-size: 18px;
+  color: #9ab;
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 1.6;
+}
+
+/* Seasons Grid - More compact like Letterboxd */
+.seasons-container {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.section-subtitle {
+  color: #9ab;
+  font-size: 14px;
+}
+
+.seasons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.season-card {
+  background: #1f2937;
+  border: 1px solid #2c3440;
+  border-radius: 4px;
+  padding: 24px 16px;
+  text-align: center;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.season-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #00c030, #00e054);
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
+}
+
+.season-card:hover {
+  background: #2c3440;
+  border-color: #00c030;
+  transform: translateY(-2px);
+}
+
+.season-card:hover::before {
+  transform: scaleX(1);
+}
+
+.season-year {
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+}
+
+.season-name {
+  color: #9ab;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Race Cards - Poster Style */
+.races-container {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.races-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.race-card {
+  background: #1f2937;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid transparent;
+}
+
+.race-card:hover {
+  border-color: #00c030;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 192, 48, 0.15);
+}
+
+.race-poster {
+  width: 100%;
+  height: 280px;
+  background: linear-gradient(135deg, #dc2626 0%, #f59e0b 50%, #00c030 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.race-poster::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, 
+    rgba(220, 38, 38, 0.9) 0%, 
+    rgba(245, 158, 11, 0.9) 50%, 
+    rgba(0, 192, 48, 0.9) 100%);
+  opacity: 0.8;
+}
+
+.race-poster-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: white;
+}
+
+.race-round {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.9;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.race-poster-title {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.race-info {
+  padding: 16px;
+}
+
+.race-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.race-location {
+  color: #9ab;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.race-date {
+  color: #6b7280;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.race-rating {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rating-dots {
+  display: flex;
+  gap: 3px;
+}
+
+.rating-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2c3440;
+  transition: background 0.2s ease;
+}
+
+.rating-dot.filled {
+  background: #00c030;
+}
+
+.rating-count {
+  color: #6b7280;
+  font-size: 11px;
+  margin-left: 4px;
+}
+
+/* Race Detail Page */
+.race-detail {
+  max-width: 1000px;
+  margin: 40px auto 0;
+  background: #1f2937;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #2c3440;
+}
+
+.race-detail-header {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 32px;
+  padding: 32px;
+}
+
+.race-detail-poster {
+  aspect-ratio: 2/3;
+  background: linear-gradient(135deg, #dc2626 0%, #f59e0b 50%, #00c030 100%);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.race-detail-poster::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, 
+    rgba(220, 38, 38, 0.9) 0%, 
+    rgba(245, 158, 11, 0.9) 50%, 
+    rgba(0, 192, 48, 0.9) 100%);
+  opacity: 0.8;
+}
+
+.race-detail-poster-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: white;
+}
+
+.race-detail-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.race-detail-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.race-meta {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.meta-item {
+  background: #14181c;
+  padding: 16px;
+  border-radius: 4px;
+  border: 1px solid #2c3440;
+}
+
+.meta-label {
+  color: #6b7280;
+  font-size: 12px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.meta-value {
+  font-weight: 600;
+  color: #fff;
+  font-size: 14px;
+}
+
+/* Reviews Section */
+.reviews-section {
+  padding: 32px;
+  border-top: 1px solid #2c3440;
+  background: #14181c;
+}
+
+.reviews-header {
+  margin-bottom: 24px;
+}
+
+.reviews-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.review-form {
+  background: #1f2937;
+  padding: 24px;
+  border-radius: 4px;
+  margin-bottom: 32px;
+  border: 1px solid #2c3440;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #fff;
+  font-size: 14px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #2c3440;
+  border-radius: 4px;
+  background: #14181c;
+  color: #fff;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #00c030;
+}
+
+.form-textarea {
+  min-height: 100px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.rating-input {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.star {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #2c3440;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.star:hover,
+.star.active {
+  background: #00c030;
+  transform: scale(1.1);
+}
+
+.submit-btn {
+  background: #00c030;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.submit-btn:hover {
+  background: #00a028;
+  transform: translateY(-1px);
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.review-card {
+  background: #1f2937;
+  padding: 20px;
+  border-radius: 4px;
+  border: 1px solid #2c3440;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.reviewer-name {
+  font-weight: 600;
+  color: #fff;
+  font-size: 14px;
+}
+
+.review-rating {
+  display: flex;
+  gap: 3px;
+}
+
+.review-comment {
+  color: #9ab;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/* Page Elements */
+.page-title {
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  text-align: center;
+  color: #fff;
+  letter-spacing: -1px;
+}
+
+.breadcrumb {
+  margin-bottom: 24px;
+  font-size: 13px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px 20px 0;
+}
+
+.breadcrumb a {
+  color: #6b7280;
+  text-decoration: none;
+  margin-right: 8px;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb a:hover {
+  color: #00c030;
+}
+
+.breadcrumb::after {
+  content: ' / ';
+  color: #4b5563;
+}
+
+.breadcrumb:last-child::after {
+  display: none;
+}
+
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+  font-size: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 32px;
+  }
+  
+  .hero-subtitle {
+    font-size: 16px;
+  }
+  
+  .header-content {
+    padding: 12px 20px;
+    gap: 16px;
+  }
+  
+  .search-container {
+    max-width: 200px;
+    margin: 0 10px;
+  }
+  
+  .nav-links {
+    gap: 12px;
+  }
+  
+  .nav-links a {
+    font-size: 12px;
+  }
+  
+  .write-review-btn {
+    padding: 6px 12px !important;
+  }
+  
+  .main-content {
+    padding: 0 16px;
+  }
+  
+  .seasons-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+  
+  .races-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+  }
+  
+  .race-detail-header {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .race-meta {
+    grid-template-columns: 1fr;
+  }
+  
+  .race-detail-title {
+    font-size: 28px;
+  }
+}
