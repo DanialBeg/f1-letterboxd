@@ -99,7 +99,15 @@ func getRacesByYear(c *gin.Context) {
 	year := c.Param("year")
 	var races []Race
 	
-	db.Joins("Season").Where("seasons.year = ?", year).Order("round_number").Find(&races)
+	// First get the season by year
+	var season Season
+	if err := db.Where("year = ?", year).First(&season).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Season not found"})
+		return
+	}
+	
+	// Then get races for that season
+	db.Where("season_id = ?", season.ID).Preload("Season").Order("round_number").Find(&races)
 	c.JSON(http.StatusOK, races)
 }
 
