@@ -124,14 +124,19 @@ const RacePage = () => {
   return (
     <div>
       <div className="breadcrumb">
-        <Link to="/">Home</Link> / 
-        <Link to={`/seasons/${race.season.year}`}>{race.season.year} Season</Link> / 
-        {race.name}
+        <Link to="/">Home</Link>
+        <Link to={`/seasons/${race.season.year}`}>{race.season.year} Season</Link>
+        <span>{race.name}</span>
       </div>
 
       <div className="race-detail">
         <div className="race-detail-header">
-          <div className="race-detail-poster">
+          <div 
+            className="race-detail-poster"
+            style={{
+              backgroundImage: race.poster_url ? `url(${race.poster_url})` : undefined
+            }}
+          >
             <div className="race-detail-poster-content">
               <div className="race-round">Round {race.round_number}</div>
               <div className="race-poster-title">{race.name.replace(' Grand Prix', '')}</div>

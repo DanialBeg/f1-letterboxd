@@ -96,7 +96,8 @@ const SeasonPage = () => {
   return (
     <div>
       <div className="breadcrumb">
-        <Link to="/">Home</Link> / {year} Season
+        <Link to="/">Home</Link>
+        <span>{year} Season</span>
       </div>
       
       <div className="races-container">
@@ -114,7 +115,12 @@ const SeasonPage = () => {
               to={`/races/${race.id}`}
               className="race-card"
             >
-              <div className="race-poster">
+              <div 
+                className="race-poster"
+                style={{
+                  backgroundImage: race.poster_url ? `url(${race.poster_url})` : undefined
+                }}
+              >
                 <div className="race-poster-content">
                   <div className="race-round">Round {race.round_number}</div>
                   <div className="race-poster-title">{race.name.replace(' Grand Prix', '')}</div>
