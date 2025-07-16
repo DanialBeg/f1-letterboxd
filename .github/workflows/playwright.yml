@@ -11,18 +11,6 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     
-    services:
-      # Start backend service for tests
-      backend:
-        image: golang:1.21
-        ports:
-          - 8080:8080
-        options: >-
-          --health-cmd "curl -f http://localhost:8080/api/seasons || exit 1"
-          --health-interval 30s
-          --health-timeout 10s
-          --health-retries 5
-
     steps:
     - uses: actions/checkout@v4
     
@@ -50,6 +38,8 @@ jobs:
       run: |
         go run . &
         sleep 10  # Wait for server to start
+        # Test if server is running
+        curl -f http://localhost:8080/api/seasons || (echo "Backend failed to start" && exit 1)
       env:
         PORT: 8080
     
@@ -67,11 +57,15 @@ jobs:
     - name: Run Playwright tests
       working-directory: ./frontend
       run: npm run test
+      env:
+        CI: true
     
     # Upload test results
     - uses: actions/upload-artifact@v4
       if: always()
       with:
         name: playwright-report
-        path: frontend/playwright-report/
+        path: |
+          frontend/playwright-report/
+          frontend/test-results/
         retention-days: 30
