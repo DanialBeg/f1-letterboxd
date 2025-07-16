@@ -36,12 +36,29 @@ jobs:
     - name: Start backend server
       working-directory: ./backend
       run: |
-        go run . &
-        sleep 10  # Wait for server to start
-        # Test if server is running
-        curl -f http://localhost:8080/api/seasons || (echo "Backend failed to start" && exit 1)
-      env:
-        PORT: 8080
+        echo "Starting backend server..."
+        go run . > backend.log 2>&1 &
+        echo $! > backend.pid
+        echo "Backend PID: $(cat backend.pid)"
+        sleep 10
+        echo "Checking if backend is running..."
+        if ! ps -p $(cat backend.pid) > /dev/null; then
+          echo "Backend process died. Log contents:"
+          cat backend.log
+          exit 1
+        fi
+        echo "Testing API endpoint..."
+        for i in {1..5}; do
+          if curl -f http://localhost:8080/api/seasons; then
+            echo "Backend is responding!"
+            break
+          else
+            echo "Attempt $i failed, waiting 2 seconds..."
+            sleep 2
+          fi
+        done
+        # Final check
+        curl -f http://localhost:8080/api/seasons || (echo "Backend failed to start after 5 attempts. Log contents:" && cat backend.log && exit 1)
     
     # Install frontend dependencies
     - name: Install frontend dependencies
