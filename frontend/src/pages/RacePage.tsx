@@ -10,6 +10,9 @@ interface Race {
   round_number: number
   circuit_name: string
   winner: string
+  winning_constructor: string
+  second_place: string
+  third_place: string
   poster_url: string
   average_rating: number
   review_count: number
@@ -178,16 +181,31 @@ const RacePage = () => {
             
             <div className="race-meta">
               <div className="meta-item">
-                <div className="meta-label">Circuit</div>
+                <div className="meta-label">🏁 Circuit</div>
                 <div className="meta-value">{race.circuit_name}</div>
               </div>
               <div className="meta-item">
-                <div className="meta-label">Winner</div>
+                <div className="meta-label">🏆 Winner</div>
                 <div className="meta-value">{race.winner}</div>
               </div>
+              {race.winning_constructor && (
+                <div className="meta-item">
+                  <div className="meta-label">🏎️ Winning Constructor</div>
+                  <div className="meta-value">{race.winning_constructor}</div>
+                </div>
+              )}
+              {race.second_place && race.third_place && (
+                <div className="meta-item">
+                  <div className="meta-label">🏅 Remaining Podium Places</div>
+                  <div className="meta-value">
+                    🥈 2nd: {race.second_place}<br />
+                    🥉 3rd: {race.third_place}
+                  </div>
+                </div>
+              )}
               {race.review_count > 0 && (
                 <div className="meta-item">
-                  <div className="meta-label">Average Rating</div>
+                  <div className="meta-label">⭐ Average Rating</div>
                   <div className="meta-value">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <div style={{ display: 'flex', gap: '3px' }}>
@@ -252,7 +270,12 @@ const RacePage = () => {
             {reviews.map((review) => (
               <div key={review.id} className="review-card">
                 <div className="review-header">
-                  <span className="reviewer-name">{review.user_name}</span>
+                  <div className="reviewer-info">
+                    <div className="reviewer-avatar">
+                      {review.user_name.charAt(0).toUpperCase()}
+                    </div>
+                    <span className="reviewer-name">{review.user_name}</span>
+                  </div>
                   <div className="review-rating">
                     {renderRatingDots(review.rating)}
                   </div>

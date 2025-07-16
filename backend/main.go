@@ -18,18 +18,21 @@ type Season struct {
 }
 
 type Race struct {
-	ID           uint    `json:"id" gorm:"primaryKey"`
-	SeasonID     uint    `json:"season_id"`
-	Season       Season  `json:"season" gorm:"foreignKey:SeasonID"`
-	Name         string  `json:"name"`
-	Location     string  `json:"location"`
-	Date         string  `json:"date"`
-	RoundNumber  int     `json:"round_number"`
-	CircuitName  string  `json:"circuit_name"`
-	Winner       string  `json:"winner"`
-	PosterURL    string  `json:"poster_url"`
-	AverageRating float64 `json:"average_rating"`
-	ReviewCount  int     `json:"review_count"`
+	ID               uint    `json:"id" gorm:"primaryKey"`
+	SeasonID         uint    `json:"season_id"`
+	Season           Season  `json:"season" gorm:"foreignKey:SeasonID"`
+	Name             string  `json:"name"`
+	Location         string  `json:"location"`
+	Date             string  `json:"date"`
+	RoundNumber      int     `json:"round_number"`
+	CircuitName      string  `json:"circuit_name"`
+	Winner           string  `json:"winner"`
+	WinningConstructor string  `json:"winning_constructor"`
+	SecondPlace      string  `json:"second_place"`
+	ThirdPlace       string  `json:"third_place"`
+	PosterURL        string  `json:"poster_url"`
+	AverageRating    float64 `json:"average_rating"`
+	ReviewCount      int     `json:"review_count"`
 }
 
 type Review struct {
