@@ -419,6 +419,10 @@ body {
   background: #00c030;
 }
 
+.rating-dot.half {
+  background: linear-gradient(to right, #00c030 50%, #2c3440 50%);
+}
+
 .rating-count {
   color: #6b7280;
   font-size: 11px;
@@ -581,21 +585,92 @@ body {
   display: flex;
   gap: 6px;
   margin-top: 8px;
+  padding: 4px 0;
+  align-items: center;
 }
 
 .star {
   width: 16px;
   height: 16px;
-  border-radius: 50%;
-  background: #2c3440;
   cursor: pointer;
   transition: all 0.2s ease;
+  position: relative;
+  display: inline-block;
 }
 
-.star:hover,
-.star.active {
-  background: #00c030;
+.star::before {
+  content: '★';
+  font-size: 16px;
+  color: #2c3440;
+  transition: color 0.2s ease;
+}
+
+.star:hover::before,
+.star.active::before {
+  color: #00c030;
   transform: scale(1.1);
+}
+
+.star.half::before {
+  background: linear-gradient(to right, #00c030 50%, #2c3440 50%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.star-container {
+  position: relative;
+  display: inline-block;
+  width: 16px;
+  height: 20px;
+  margin-right: 4px;
+}
+
+.star-half {
+  position: absolute;
+  top: 0;
+  width: 8px;
+  height: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.star-half::before {
+  content: '★';
+  font-size: 16px;
+  color: #2c3440;
+  position: absolute;
+  transition: color 0.2s ease;
+}
+
+.star-left {
+  left: 0;
+}
+
+.star-left::before {
+  left: 0;
+}
+
+.star-right {
+  right: 0;
+}
+
+.star-right::before {
+  right: 0;
+}
+
+.star-half.active::before {
+  color: #00c030;
+}
+
+.star-container:hover {
+  transform: scale(1.1);
+}
+
+.star-half:hover::before {
+  color: #00c030;
 }
 
 .submit-btn {

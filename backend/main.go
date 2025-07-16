@@ -33,13 +33,13 @@ type Race struct {
 }
 
 type Review struct {
-	ID        uint   `json:"id" gorm:"primaryKey"`
-	RaceID    uint   `json:"race_id"`
-	Race      Race   `json:"race" gorm:"foreignKey:RaceID"`
-	UserName  string `json:"user_name"`
-	Rating    int    `json:"rating"`
-	Comment   string `json:"comment"`
-	CreatedAt string `json:"created_at"`
+	ID        uint    `json:"id" gorm:"primaryKey"`
+	RaceID    uint    `json:"race_id"`
+	Race      Race    `json:"race" gorm:"foreignKey:RaceID"`
+	UserName  string  `json:"user_name"`
+	Rating    float64 `json:"rating"`
+	Comment   string  `json:"comment"`
+	CreatedAt string  `json:"created_at"`
 }
 
 var db *gorm.DB
@@ -137,6 +137,18 @@ func createReview(c *gin.Context) {
 	
 	if err := c.ShouldBindJSON(&review); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
+	// Validate rating is between 0.5 and 5.0 in 0.5 increments
+	if review.Rating < 0.5 || review.Rating > 5.0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Rating must be between 0.5 and 5.0"})
+		return
+	}
+	
+	// Check if rating is in 0.5 increments
+	if (review.Rating * 2) != float64(int(review.Rating * 2)) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Rating must be in 0.5 increments (e.g., 1.0, 1.5, 2.0, etc.)"})
 		return
 	}
 	

@@ -36,6 +36,7 @@ const RacePage = () => {
     rating: 0,
     comment: ''
   })
+  const [hoverRating, setHoverRating] = useState(0)
 
   useEffect(() => {
     const fetchRaceData = async () => {
@@ -101,14 +102,36 @@ const RacePage = () => {
 
   const renderRatingDots = (rating: number, interactive = false) => {
     const dots = []
+    const displayRating = interactive && hoverRating > 0 ? hoverRating : rating
+    
     for (let i = 1; i <= 5; i++) {
-      dots.push(
-        <span
-          key={i}
-          className={`star ${i <= rating ? 'active' : ''}`}
-          onClick={interactive ? () => setNewReview({ ...newReview, rating: i }) : undefined}
-        />
-      )
+      const isFull = i <= Math.floor(displayRating)
+      const isHalf = i === Math.ceil(displayRating) && displayRating % 1 === 0.5
+      
+      if (interactive) {
+        dots.push(
+          <span 
+            key={i} 
+            className="star-container"
+            onMouseLeave={() => setHoverRating(0)}
+          >
+            <span
+              className={`star-half star-left ${i - 0.5 <= displayRating ? 'active' : ''}`}
+              onClick={() => setNewReview({ ...newReview, rating: i - 0.5 })}
+              onMouseEnter={() => setHoverRating(i - 0.5)}
+            />
+            <span
+              className={`star-half star-right ${i <= displayRating ? 'active' : ''}`}
+              onClick={() => setNewReview({ ...newReview, rating: i })}
+              onMouseEnter={() => setHoverRating(i)}
+            />
+          </span>
+        )
+      } else {
+        dots.push(
+          <span key={i} className={`star ${isFull ? 'active' : isHalf ? 'half' : ''}`} />
+        )
+      }
     }
     return dots
   }

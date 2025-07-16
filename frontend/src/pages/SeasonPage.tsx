@@ -80,13 +80,15 @@ const SeasonPage = () => {
 
   const renderRatingDots = (rating: number) => {
     const dots = []
-    const filledDots = Math.round(rating)
     
     for (let i = 1; i <= 5; i++) {
+      const isFull = i <= Math.floor(rating)
+      const isHalf = i === Math.ceil(rating) && rating % 1 === 0.5
+      
       dots.push(
         <span
           key={i}
-          className={`rating-dot ${i <= filledDots ? 'filled' : ''}`}
+          className={`rating-dot ${isFull ? 'filled' : isHalf ? 'half' : ''}`}
         />
       )
     }
