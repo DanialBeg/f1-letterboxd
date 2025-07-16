@@ -51,9 +51,7 @@ test.describe('Homepage', () => {
     const heroSection = page.locator('.hero-section');
     await expect(heroSection).toBeVisible();
     
-    // Check computed styles contain the background image
-    const beforeElement = page.locator('.hero-section::before');
-    // We can't directly test ::before pseudo-element, but we can check the hero section exists
+    // We can't directly test ::before pseudo-element, but we can check the hero section styling
     await expect(heroSection).toHaveCSS('position', 'relative');
   });
 });
