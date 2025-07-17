@@ -16,7 +16,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.21'
+        go-version: '1.23'
     
     - name: Install dependencies
       working-directory: ./backend
@@ -72,7 +72,7 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
-        go-version: '1.21'
+        go-version: '1.23'
     
     # Setup Node.js for frontend
     - name: Set up Node.js
@@ -106,18 +106,19 @@ jobs:
           cat backend.log
           exit 1
         fi
-        echo "Testing API endpoint..."
-        for i in {1..5}; do
-          if curl -f http://localhost:8080/api/seasons; then
-            echo "Backend is responding!"
+        echo "Testing health endpoint..."
+        for i in {1..10}; do
+          if curl -f http://localhost:8080/health; then
+            echo "Backend health check passed!"
             break
           else
-            echo "Attempt $i failed, waiting 2 seconds..."
-            sleep 2
+            echo "Health check attempt $i failed, waiting 3 seconds..."
+            sleep 3
           fi
         done
-        # Final check
-        curl -f http://localhost:8080/api/seasons || (echo "Backend failed to start after 5 attempts. Log contents:" && cat backend.log && exit 1)
+        # Test API endpoint
+        echo "Testing API endpoint..."
+        curl -f http://localhost:8080/api/seasons || (echo "API endpoint failed. Log contents:" && cat backend.log && exit 1)
     
     # Install Playwright and run tests
     - name: Install Playwright Browsers

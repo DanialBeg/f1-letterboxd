@@ -78,6 +78,11 @@ func main() {
 		c.Next()
 	})
 
+	// Health check endpoint
+	router.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	})
+
 	// API routes
 	api := router.Group("/api")
 	{
@@ -88,8 +93,12 @@ func main() {
 		api.POST("/races/:id/reviews", createReview)
 	}
 
-	log.Println("Server starting on :8080")
-	router.Run(":8080")
+	port := ":8080"
+	log.Printf("Server starting on %s", port)
+	log.Printf("Database file: f1_letterboxd.db")
+	if err := router.Run(port); err != nil {
+		log.Fatal("Failed to start server:", err)
+	}
 }
 
 func getSeasons(c *gin.Context) {
