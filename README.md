@@ -3,17 +3,19 @@
 [![CI/CD Pipeline](https://github.com/DanialBeg/f1-letterboxd/actions/workflows/ci.yml/badge.svg)](https://github.com/DanialBeg/f1-letterboxd/actions/workflows/ci.yml)
 [![Playwright Tests](https://github.com/DanialBeg/f1-letterboxd/actions/workflows/playwright.yml/badge.svg)](https://github.com/DanialBeg/f1-letterboxd/actions/workflows/playwright.yml)
 
-A Letterboxd-style application for Formula 1 races, allowing users to rate and review F1 races.
+A Letterboxd-style application for Formula 1 races, allowing users to rate and review F1 races with a dramatic hero section and comprehensive testing suite.
 
 ## Features
 
-- 🏎️ Browse F1 seasons and races
-- ⭐ Rate races with half-star precision (0.5 - 5.0)
-- 📝 Write detailed race reviews
+- 🏎️ Browse F1 seasons and races with hero background imagery
+- ⭐ Interactive star rating system with half-star precision (0.5 - 5.0)
+- 📝 Write detailed race reviews with user avatars
 - 🏆 View race winners, constructors, and podium finishers
-- 🎨 F1-themed UI with official red color scheme
+- 🎨 Authentic F1-themed UI with official red color scheme (#FF1E00)
 - 📱 Responsive design for mobile and desktop
 - 🖼️ Race car images from Wikimedia Commons
+- 🍞 Breadcrumb navigation for easy page traversal
+- 🌍 Timezone-aware race date display
 
 ## Tech Stack
 
@@ -30,10 +32,12 @@ A Letterboxd-style application for Formula 1 races, allowing users to rate and r
 - **Axios** for API calls
 - CSS3 with custom styling
 
-### Testing
-- **Playwright** for E2E testing
-- **GitHub Actions** for CI/CD
-- Automated testing on push/PR
+### Testing & Build
+- **Playwright** for comprehensive E2E testing
+- **Bazel** for advanced build orchestration
+- **GitHub Actions** for CI/CD pipeline
+- **Node.js 20** LTS runtime environment
+- Automated testing on push/PR with multi-browser support
 
 ## Project Structure
 
@@ -41,14 +45,23 @@ A Letterboxd-style application for Formula 1 races, allowing users to rate and r
 f1-letterboxd/
 ├── frontend/          # React TypeScript frontend
 │   ├── src/
-│   │   ├── components/    # Reusable components
-│   │   ├── pages/        # Page components
+│   │   ├── components/    # Reusable components (Header)
+│   │   ├── pages/        # Page components (Home, Season, Race)
 │   │   └── App.tsx       # Main app component
 │   └── package.json
 ├── backend/           # Go API backend
-│   ├── main.go       # Main server file
-│   ├── seed.go       # Database seeding
+│   ├── main.go       # Main server file with CORS
+│   ├── seed.go       # Database seeding with race data
 │   └── go.mod        # Go dependencies
+├── e2e/              # End-to-end testing
+│   ├── tests/        # Playwright test files
+│   ├── playwright.config.ts
+│   └── package.json
+├── .github/workflows/ # CI/CD pipeline
+│   ├── ci.yml        # Main CI workflow
+│   └── playwright.yml # Dedicated E2E tests
+├── BUILD.bazel       # Bazel build configurations
+├── MODULE.bazel      # Bazel module definition
 └── README.md
 ```
 
@@ -56,9 +69,10 @@ f1-letterboxd/
 
 ### Prerequisites
 
-- Node.js (v18+)
-- Go (v1.21+)
-- PostgreSQL
+- Node.js (v20+ LTS recommended)
+- Go (v1.23+)
+- SQLite (automatically handled)
+- Optional: Bazel (for advanced build orchestration)
 
 ### Backend Setup
 ```bash
@@ -78,21 +92,41 @@ Frontend runs on `http://localhost:5173`
 
 ## Testing
 
-### Run Playwright Tests
+### Run E2E Tests (Playwright)
 ```bash
-cd frontend
-npm test                 # Run all tests
-npm run test:ui         # Run with UI mode
-npm run test:report     # View test report
+# Standard approach
+cd e2e
+npm install
+npx playwright test                    # Run all tests
+npx playwright test --project=chromium # Run Chromium only
+npx playwright test --ui              # Run with UI mode
+npx playwright show-report           # View test report
+
+# Using Bazel (advanced)
+bazel test //e2e:integration_tests   # Run via Bazel
+```
+
+### Run with Servers
+```bash
+# Terminal 1: Start backend
+cd backend && go run main.go
+
+# Terminal 2: Start frontend  
+cd frontend && npm run dev
+
+# Terminal 3: Run tests
+cd e2e && npx playwright test --project=chromium
 ```
 
 ### Test Coverage
-- Homepage navigation and content
-- Season page race listings
-- Race detail pages with reviews
-- Review submission with star ratings
+- Homepage hero section and navigation
+- Season page race listings with ratings
+- Race detail pages with interactive reviews
+- Star rating system (half-star precision)
+- Review submission with validation
+- Cross-browser compatibility
 - Mobile responsiveness
-- Error handling
+- Error handling and edge cases
 
 ### Database Schema
 
@@ -115,19 +149,23 @@ Sample data for 2023 and 2024 seasons is automatically seeded.
 ## Features Overview
 
 ### Home Page
-- Grid of available seasons
+- Dramatic hero section with F1 race background imagery
+- Grid of available seasons with F1 red theming
 - Quick navigation to season pages
+- Responsive design for all devices
 
 ### Season Page
-- List of all races in the season
-- Race cards with basic information
-- Ratings display for reviewed races
+- List of all races in the season with race cards
+- Race information including location, date, and winner
+- Rating displays for reviewed races
+- Breadcrumb navigation
 
 ### Race Detail Page
-- Complete race information (circuit, winner, date)
-- Review submission form
-- Display of all user reviews
-- Interactive star rating system
+- Complete race information (circuit, winner, date, podium)
+- Interactive star rating system with half-star precision
+- Review submission form with validation
+- Display of all user reviews with avatars
+- Timezone-aware date display
 
 ## Contributing
 
@@ -138,10 +176,11 @@ Sample data for 2023 and 2024 seasons is automatically seeded.
 5. Open a Pull Request
 
 All PRs must pass:
-- ✅ Backend tests
-- ✅ Frontend build
+- ✅ Backend tests and build
+- ✅ Frontend build and linting
 - ✅ ESLint checks
-- ✅ Playwright E2E tests
+- ✅ Playwright E2E tests (11 test scenarios)
+- ✅ Multi-browser compatibility testing
 
 ## License
 
