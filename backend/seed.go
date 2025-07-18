@@ -6,13 +6,21 @@ import (
 )
 
 func seedData(db *gorm.DB) {
+	log.Println("Checking if data already exists...")
 	// Check if data already exists
 	var seasonCount int64
-	db.Model(&Season{}).Count(&seasonCount)
-	if seasonCount > 0 {
-		log.Println("Data already exists, skipping seed")
+	result := db.Model(&Season{}).Count(&seasonCount)
+	if result.Error != nil {
+		log.Printf("Error checking existing data: %v", result.Error)
 		return
 	}
+	
+	if seasonCount > 0 {
+		log.Printf("Data already exists (%d seasons), skipping seed", seasonCount)
+		return
+	}
+	
+	log.Println("No existing data found, proceeding with seeding...")
 
 	// Create seasons
 	seasons := []Season{
@@ -22,13 +30,24 @@ func seedData(db *gorm.DB) {
 		{Year: 2021, Name: "2021 Formula 1 World Championship"},
 	}
 
+	log.Println("Creating seasons...")
 	for _, season := range seasons {
-		db.Create(&season)
+		result := db.Create(&season)
+		if result.Error != nil {
+			log.Printf("Error creating season %d: %v", season.Year, result.Error)
+			return
+		}
 	}
+	log.Printf("Created %d seasons successfully", len(seasons))
 
 	// Get the 2024 season for race creation
+	log.Println("Retrieving 2024 season for race creation...")
 	var season2024 Season
-	db.Where("year = ?", 2024).First(&season2024)
+	result := db.Where("year = ?", 2024).First(&season2024)
+	if result.Error != nil {
+		log.Printf("Error retrieving 2024 season: %v", result.Error)
+		return
+	}
 
 	// Create 2024 F1 races (complete season)
 	races2024 := []Race{
@@ -283,13 +302,24 @@ func seedData(db *gorm.DB) {
 		},
 	}
 
+	log.Println("Creating 2024 races...")
 	for _, race := range races2024 {
-		db.Create(&race)
+		result := db.Create(&race)
+		if result.Error != nil {
+			log.Printf("Error creating 2024 race %s: %v", race.Name, result.Error)
+			return
+		}
 	}
+	log.Printf("Created %d races for 2024 season", len(races2024))
 
 	// Get the 2023 season for race creation
+	log.Println("Retrieving 2023 season for race creation...")
 	var season2023 Season
-	db.Where("year = ?", 2023).First(&season2023)
+	result = db.Where("year = ?", 2023).First(&season2023)
+	if result.Error != nil {
+		log.Printf("Error retrieving 2023 season: %v", result.Error)
+		return
+	}
 
 	// Create some 2023 F1 races
 	races2023 := []Race{
@@ -345,9 +375,15 @@ func seedData(db *gorm.DB) {
 		},
 	}
 
+	log.Println("Creating 2023 races...")
 	for _, race := range races2023 {
-		db.Create(&race)
+		result := db.Create(&race)
+		if result.Error != nil {
+			log.Printf("Error creating 2023 race %s: %v", race.Name, result.Error)
+			return
+		}
 	}
+	log.Printf("Created %d races for 2023 season", len(races2023))
 
 	log.Println("Database seeded successfully!")
 }

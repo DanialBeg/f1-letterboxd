@@ -50,17 +50,28 @@ var db *gorm.DB
 func main() {
 	var err error
 	
+	log.Println("Starting F1 Letterboxd server...")
+	
 	// Database connection - use SQLite for development
+	log.Println("Connecting to database...")
 	db, err = gorm.Open(sqlite.Open("f1_letterboxd.db"), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
+	log.Println("Database connected successfully")
 
 	// Auto-migrate schemas
-	db.AutoMigrate(&Season{}, &Race{}, &Review{})
+	log.Println("Running database migrations...")
+	err = db.AutoMigrate(&Season{}, &Race{}, &Review{})
+	if err != nil {
+		log.Fatal("Failed to migrate database:", err)
+	}
+	log.Println("Database migrations completed")
 
 	// Seed data
+	log.Println("Seeding database...")
 	seedData(db)
+	log.Println("Database seeding completed")
 
 	router := gin.Default()
 

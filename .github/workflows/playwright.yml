@@ -44,7 +44,12 @@ jobs:
         go run . > backend.log 2>&1 &
         echo $! > backend.pid
         echo "Backend PID: $(cat backend.pid)"
-        sleep 15
+        echo "Waiting for backend to start..."
+        sleep 5
+        echo "Initial backend log contents:"
+        cat backend.log
+        echo "Waiting additional 10 seconds..."
+        sleep 10
         echo "Checking if backend is running..."
         if ! ps -p $(cat backend.pid) > /dev/null; then
           echo "Backend process died. Log contents:"
