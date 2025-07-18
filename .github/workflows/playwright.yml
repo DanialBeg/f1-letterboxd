@@ -24,7 +24,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '20'
         cache: 'npm'
         cache-dependency-path: frontend/package-lock.json
     
@@ -94,7 +94,9 @@ jobs:
             echo "Frontend is accessible!"
             break
           else
-            echo "Frontend check attempt $i failed, waiting 2 seconds..."
+            if [ $i -eq 1 ] || [ $((i % 10)) -eq 0 ]; then
+              echo "Frontend check attempt $i failed, waiting 2 seconds..."
+            fi
             sleep 2
           fi
         done
