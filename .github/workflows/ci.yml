@@ -131,6 +131,29 @@ jobs:
         echo "Testing API endpoint..."
         curl -f http://localhost:8080/api/seasons || (echo "API endpoint failed. Log contents:" && cat backend.log && exit 1)
     
+    # Start frontend server
+    - name: Start frontend server
+      working-directory: ./frontend
+      run: |
+        echo "Starting frontend server..."
+        npm run dev > frontend.log 2>&1 &
+        echo $! > frontend.pid
+        echo "Frontend PID: $(cat frontend.pid)"
+        echo "Waiting for frontend to start..."
+        sleep 10
+        echo "Frontend log contents:"
+        cat frontend.log
+        echo "Testing frontend endpoint..."
+        for i in {1..30}; do
+          if curl -f http://localhost:5173; then
+            echo "Frontend is accessible!"
+            break
+          else
+            echo "Frontend check attempt $i failed, waiting 2 seconds..."
+            sleep 2
+          fi
+        done
+    
     # Install Playwright and run tests
     - name: Install e2e test dependencies
       working-directory: ./e2e
@@ -142,25 +165,30 @@ jobs:
     
     - name: Run Playwright tests
       working-directory: ./e2e
-      run: npx playwright test
+      run: npx playwright test --project=chromium
       env:
         CI: true
     
     # Clean up
-    - name: Stop backend server
+    - name: Stop servers
       if: always()
       run: |
         if [ -f backend/backend.pid ]; then
           kill $(cat backend/backend.pid) || true
         fi
+        if [ -f frontend/frontend.pid ]; then
+          kill $(cat frontend/frontend.pid) || true
+        fi
     
-    # Upload test results
+    # Upload test results and logs
     - name: Upload Playwright Report
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: playwright-report
+        name: playwright-report-ci
         path: |
           e2e/playwright-report/
           e2e/test-results/
+          backend/backend.log
+          frontend/frontend.log
         retention-days: 30
