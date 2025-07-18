@@ -96,24 +96,30 @@ jobs:
       working-directory: ./backend
       run: |
         echo "Starting backend server..."
+        echo "Current directory: $(pwd)"
+        echo "Files in backend directory:"
+        ls -la
+        echo "Starting Go server..."
         go run . > backend.log 2>&1 &
         echo $! > backend.pid
         echo "Backend PID: $(cat backend.pid)"
-        sleep 10
+        sleep 15
         echo "Checking if backend is running..."
         if ! ps -p $(cat backend.pid) > /dev/null; then
           echo "Backend process died. Log contents:"
           cat backend.log
           exit 1
         fi
+        echo "Backend process is still running. Log contents so far:"
+        cat backend.log
         echo "Testing health endpoint..."
-        for i in {1..10}; do
+        for i in {1..15}; do
           if curl -f http://localhost:8080/health; then
             echo "Backend health check passed!"
             break
           else
-            echo "Health check attempt $i failed, waiting 3 seconds..."
-            sleep 3
+            echo "Health check attempt $i failed, waiting 5 seconds..."
+            sleep 5
           fi
         done
         # Test API endpoint
@@ -121,13 +127,17 @@ jobs:
         curl -f http://localhost:8080/api/seasons || (echo "API endpoint failed. Log contents:" && cat backend.log && exit 1)
     
     # Install Playwright and run tests
+    - name: Install e2e test dependencies
+      working-directory: ./e2e
+      run: npm ci
+    
     - name: Install Playwright Browsers
-      working-directory: ./frontend
+      working-directory: ./e2e
       run: npx playwright install --with-deps
     
     - name: Run Playwright tests
-      working-directory: ./frontend
-      run: npm run test
+      working-directory: ./e2e
+      run: npx playwright test
       env:
         CI: true
     
@@ -146,6 +156,6 @@ jobs:
       with:
         name: playwright-report
         path: |
-          frontend/playwright-report/
-          frontend/test-results/
+          e2e/playwright-report/
+          e2e/test-results/
         retention-days: 30
