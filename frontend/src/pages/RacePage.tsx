@@ -175,7 +175,7 @@ const RacePage = () => {
           <div className="race-detail-info">
             <h1 className="race-detail-title">{race.name}</h1>
             <p style={{ color: '#9ab', marginBottom: '24px' }}>
-              {race.location} • {new Date(race.date).toLocaleDateString('en-US', { 
+              {race.location} • {new Date(race.date + 'T12:00:00').toLocaleDateString('en-US', { 
                 year: 'numeric',
                 month: 'long', 
                 day: 'numeric' 

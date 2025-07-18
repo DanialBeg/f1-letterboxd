@@ -131,7 +131,7 @@ const SeasonPage = () => {
               <div className="race-info">
                 <div className="race-name">{race.name}</div>
                 <div className="race-location">{race.location}</div>
-                <div className="race-date">{new Date(race.date).toLocaleDateString('en-US', { 
+                <div className="race-date">{new Date(race.date + 'T12:00:00').toLocaleDateString('en-US', { 
                   month: 'short', 
                   day: 'numeric' 
                 })}</div>
