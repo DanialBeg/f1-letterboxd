@@ -1,0 +1,60 @@
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_test")
+
+# Install Playwright browsers and dependencies
+nodejs_test(
+    name = "playwright_install",
+    data = [
+        "package.json",
+        "package-lock.json",
+        "@npm//playwright",
+    ],
+    entry_point = "@npm//:node_modules/playwright/cli.js",
+    args = ["install"],
+    tags = ["manual"],
+)
+
+# Integration tests using Playwright
+nodejs_test(
+    name = "integration_tests",
+    data = [
+        "package.json",
+        "package-lock.json",
+        "playwright.config.ts",
+        "@npm//playwright",
+        "@npm//@playwright/test",
+    ] + glob([
+        "tests/**/*.ts",
+        "tests/**/*.spec.ts",
+    ]),
+    entry_point = "@npm//:node_modules/playwright/cli.js",
+    args = ["test"],
+    deps = [
+        "//backend:server",
+        "//frontend:dev",
+    ],
+    tags = ["integration"],
+    visibility = ["//visibility:public"],
+)
+
+# Manual test runner for development
+nodejs_test(
+    name = "test_ui",
+    data = [
+        "package.json",
+        "package-lock.json", 
+        "playwright.config.ts",
+        "@npm//playwright",
+        "@npm//@playwright/test",
+    ] + glob([
+        "tests/**/*.ts",
+        "tests/**/*.spec.ts",
+    ]),
+    entry_point = "@npm//:node_modules/playwright/cli.js",
+    args = ["test", "--ui"],
+    deps = [
+        "//backend:server",
+        "//frontend:dev",
+    ],
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+)
