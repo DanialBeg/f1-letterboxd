@@ -3,6 +3,7 @@ import './App.css'
 import Header from './components/Header'
 import HomePage from './pages/HomePage'
 import RacesPage from './pages/RacesPage'
+import ReviewsPage from './pages/ReviewsPage'
 import SeasonPage from './pages/SeasonPage'
 import RacePage from './pages/RacePage'
 
@@ -15,6 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/races" element={<RacesPage />} />
+            <Route path="/reviews" element={<ReviewsPage />} />
             <Route path="/seasons/:year" element={<SeasonPage />} />
             <Route path="/races/:id" element={<RacePage />} />
           </Routes>

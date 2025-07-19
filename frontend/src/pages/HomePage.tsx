@@ -36,14 +36,47 @@ const HomePage = () => {
         const racesResponse = await axios.get('http://localhost:8080/api/seasons/2024/races')
         const races = racesResponse.data
         
+        // Add flag emojis to the races
+        const raceFlags: { [key: string]: string } = {
+          "Bahrain Grand Prix": "🇧🇭",
+          "Saudi Arabian Grand Prix": "🇸🇦", 
+          "Australian Grand Prix": "🇦🇺",
+          "Japanese Grand Prix": "🇯🇵",
+          "Chinese Grand Prix": "🇨🇳",
+          "Miami Grand Prix": "🇺🇸",
+          "Emilia Romagna Grand Prix": "🇮🇹",
+          "Monaco Grand Prix": "🇲🇨",
+          "Canadian Grand Prix": "🇨🇦",
+          "Spanish Grand Prix": "🇪🇸",
+          "Austrian Grand Prix": "🇦🇹",
+          "British Grand Prix": "🇬🇧",
+          "Hungarian Grand Prix": "🇭🇺",
+          "Belgian Grand Prix": "🇧🇪",
+          "Dutch Grand Prix": "🇳🇱",
+          "Italian Grand Prix": "🇮🇹",
+          "Azerbaijan Grand Prix": "🇦🇿",
+          "Singapore Grand Prix": "🇸🇬",
+          "United States Grand Prix": "🇺🇸",
+          "Mexico City Grand Prix": "🇲🇽",
+          "Brazilian Grand Prix": "🇧🇷",
+          "Las Vegas Grand Prix": "🇺🇸",
+          "Qatar Grand Prix": "🇶🇦",
+          "Abu Dhabi Grand Prix": "🇦🇪"
+        }
+        
+        const racesWithFlags = races.map((race: Race) => ({
+          ...race,
+          country: raceFlags[race.name] || "🏁"
+        }))
+        
         // Sort by date and take the most recent 6
-        const sortedRaces = races.sort((a: Race, b: Race) => 
+        const sortedRaces = racesWithFlags.sort((a: Race, b: Race) => 
           new Date(b.date).getTime() - new Date(a.date).getTime()
         ).slice(0, 6)
         setRecentRaces(sortedRaces)
         
         // For now, use same races for popular races (in real app, this would be based on review counts/ratings)
-        setPopularRaces(races.slice(0, 6))
+        setPopularRaces(racesWithFlags.slice(0, 6))
         
         // Mock friends reviews data (in real app, this would come from an API)
         setFriendsReviews([
