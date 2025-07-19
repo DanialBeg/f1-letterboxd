@@ -1,29 +1,43 @@
 # F1 Letterboxd
 
-A Formula 1 racing review platform inspired by Letterboxd. Users can browse F1 seasons, explore races, and leave reviews with ratings.
+[![CI/CD Pipeline](https://github.com/DanialBeg/f1-letterboxd/actions/workflows/ci.yml/badge.svg)](https://github.com/DanialBeg/f1-letterboxd/actions/workflows/ci.yml)
+[![Playwright Tests](https://github.com/DanialBeg/f1-letterboxd/actions/workflows/playwright.yml/badge.svg)](https://github.com/DanialBeg/f1-letterboxd/actions/workflows/playwright.yml)
+
+A Letterboxd-style application for Formula 1 races, allowing users to rate and review F1 races with a dramatic hero section and comprehensive testing suite.
 
 ## Features
 
-- 🏁 Browse F1 seasons and races
-- ⭐ Rate and review races (1-5 stars)
-- 🎨 Letterboxd-inspired dark UI
-- 📱 Responsive design
-- 🔍 Race details with circuit information, winners, and dates
+- 🏎️ Browse F1 seasons and races with hero background imagery
+- ⭐ Interactive star rating system with half-star precision (0.5 - 5.0)
+- 📝 Write detailed race reviews with user avatars
+- 🏆 View race winners, constructors, and podium finishers
+- 🎨 Authentic F1-themed UI with official red color scheme (#FF1E00)
+- 📱 Responsive design for mobile and desktop
+- 🖼️ Race car images from Wikimedia Commons
+- 🍞 Breadcrumb navigation for easy page traversal
+- 🌍 Timezone-aware race date display
 
 ## Tech Stack
 
-**Frontend:**
-- React 18 with TypeScript
-- Vite for development
-- React Router for navigation
-- Axios for API calls
-- Letterboxd-inspired CSS styling
+### Backend
+- **Go** with Gin framework
+- **GORM** for database ORM
+- **SQLite** for data storage
+- RESTful API architecture
 
-**Backend:**
-- Go with Gin web framework
-- GORM for database operations
-- PostgreSQL database
-- RESTful API design
+### Frontend
+- **React** with TypeScript
+- **Vite** for build tooling
+- **React Router** for navigation
+- **Axios** for API calls
+- CSS3 with custom styling
+
+### Testing & Build
+- **Playwright** for comprehensive E2E testing
+- **Bazel** for advanced build orchestration
+- **GitHub Actions** for CI/CD pipeline
+- **Node.js 20** LTS runtime environment
+- Automated testing on push/PR with multi-browser support
 
 ## Project Structure
 
@@ -31,14 +45,23 @@ A Formula 1 racing review platform inspired by Letterboxd. Users can browse F1 s
 f1-letterboxd/
 ├── frontend/          # React TypeScript frontend
 │   ├── src/
-│   │   ├── components/    # Reusable components
-│   │   ├── pages/        # Page components
+│   │   ├── components/    # Reusable components (Header)
+│   │   ├── pages/        # Page components (Home, Season, Race)
 │   │   └── App.tsx       # Main app component
 │   └── package.json
 ├── backend/           # Go API backend
-│   ├── main.go       # Main server file
-│   ├── seed.go       # Database seeding
+│   ├── main.go       # Main server file with CORS
+│   ├── seed.go       # Database seeding with race data
 │   └── go.mod        # Go dependencies
+├── e2e/              # End-to-end testing
+│   ├── tests/        # Playwright test files
+│   ├── playwright.config.ts
+│   └── package.json
+├── .github/workflows/ # CI/CD pipeline
+│   ├── ci.yml        # Main CI workflow
+│   └── playwright.yml # Dedicated E2E tests
+├── BUILD.bazel       # Bazel build configurations
+├── MODULE.bazel      # Bazel module definition
 └── README.md
 ```
 
@@ -46,54 +69,64 @@ f1-letterboxd/
 
 ### Prerequisites
 
-- Node.js (v18+)
-- Go (v1.21+)
-- PostgreSQL
-
-### Frontend Setup
-
-1. Navigate to the project root:
-   ```bash
-   cd f1-letterboxd
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-   The frontend will be available at `http://localhost:5173`
+- Node.js (v20+ LTS recommended)
+- Go (v1.23+)
+- SQLite (automatically handled)
+- Optional: Bazel (for advanced build orchestration)
 
 ### Backend Setup
+```bash
+cd backend
+go mod tidy
+go run .
+```
+Backend runs on `http://localhost:8080`
 
-1. Install Go dependencies:
-   ```bash
-   cd backend
-   go mod tidy
-   ```
+### Frontend Setup
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Frontend runs on `http://localhost:5173`
 
-2. Set up PostgreSQL database:
-   ```bash
-   createdb f1_letterboxd
-   ```
+## Testing
 
-3. Update database connection in `main.go` if needed:
-   ```go
-   // Update this line with your PostgreSQL credentials
-   db, err = gorm.Open(postgres.Open("host=localhost user=postgres dbname=f1_letterboxd sslmode=disable"), &gorm.Config{})
-   ```
+### Run E2E Tests (Playwright)
+```bash
+# Standard approach
+cd e2e
+npm install
+npx playwright test                    # Run all tests
+npx playwright test --project=chromium # Run Chromium only
+npx playwright test --ui              # Run with UI mode
+npx playwright show-report           # View test report
 
-4. Run the backend server:
-   ```bash
-   go run .
-   ```
+# Using Bazel (advanced)
+bazel test //e2e:integration_tests   # Run via Bazel
+```
 
-   The API will be available at `http://localhost:8080`
+### Run with Servers
+```bash
+# Terminal 1: Start backend
+cd backend && go run main.go
+
+# Terminal 2: Start frontend  
+cd frontend && npm run dev
+
+# Terminal 3: Run tests
+cd e2e && npx playwright test --project=chromium
+```
+
+### Test Coverage
+- Homepage hero section and navigation
+- Season page race listings with ratings
+- Race detail pages with interactive reviews
+- Star rating system (half-star precision)
+- Review submission with validation
+- Cross-browser compatibility
+- Mobile responsiveness
+- Error handling and edge cases
 
 ### Database Schema
 
@@ -116,42 +149,39 @@ Sample data for 2023 and 2024 seasons is automatically seeded.
 ## Features Overview
 
 ### Home Page
-- Grid of available seasons
+- Dramatic hero section with F1 race background imagery
+- Grid of available seasons with F1 red theming
 - Quick navigation to season pages
+- Responsive design for all devices
 
 ### Season Page
-- List of all races in the season
-- Race cards with basic information
-- Ratings display for reviewed races
+- List of all races in the season with race cards
+- Race information including location, date, and winner
+- Rating displays for reviewed races
+- Breadcrumb navigation
 
 ### Race Detail Page
-- Complete race information (circuit, winner, date)
-- Review submission form
-- Display of all user reviews
-- Interactive star rating system
+- Complete race information (circuit, winner, date, podium)
+- Interactive star rating system with half-star precision
+- Review submission form with validation
+- Display of all user reviews with avatars
+- Timezone-aware date display
 
-## Styling
+## Contributing
 
-The UI closely mimics Letterboxd's design:
-- Dark theme with orange accents (#ff6900)
-- Card-based layouts
-- Clean typography
-- Hover effects and smooth transitions
-- Responsive grid layouts
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feat/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feat/amazing-feature`)
+5. Open a Pull Request
 
-## Development
+All PRs must pass:
+- ✅ Backend tests and build
+- ✅ Frontend build and linting
+- ✅ ESLint checks
+- ✅ Playwright E2E tests (11 test scenarios)
+- ✅ Multi-browser compatibility testing
 
-To make changes:
+## License
 
-1. **Frontend**: Modify files in the `src/` directory. Changes will hot-reload.
-2. **Backend**: Modify Go files and restart the server with `go run .`
-3. **Styling**: Update `App.css` for visual changes
-
-## Future Enhancements
-
-- User authentication and profiles
-- Advanced filtering and search
-- Driver and team information
-- Race highlights and media
-- Social features (following, lists)
-- Mobile app version
+This project is licensed under the MIT License.

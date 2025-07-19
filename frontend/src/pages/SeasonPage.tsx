@@ -80,13 +80,15 @@ const SeasonPage = () => {
 
   const renderRatingDots = (rating: number) => {
     const dots = []
-    const filledDots = Math.round(rating)
     
     for (let i = 1; i <= 5; i++) {
+      const isFull = i <= Math.floor(rating)
+      const isHalf = i === Math.ceil(rating) && rating % 1 === 0.5
+      
       dots.push(
         <span
           key={i}
-          className={`rating-dot ${i <= filledDots ? 'filled' : ''}`}
+          className={`rating-dot ${isFull ? 'filled' : isHalf ? 'half' : ''}`}
         />
       )
     }
@@ -96,7 +98,8 @@ const SeasonPage = () => {
   return (
     <div>
       <div className="breadcrumb">
-        <Link to="/">Home</Link> / {year} Season
+        <Link to="/">Home</Link>
+        <span>{year} Season</span>
       </div>
       
       <div className="races-container">
@@ -114,7 +117,12 @@ const SeasonPage = () => {
               to={`/races/${race.id}`}
               className="race-card"
             >
-              <div className="race-poster">
+              <div 
+                className="race-poster"
+                style={{
+                  backgroundImage: race.poster_url ? `url(${race.poster_url})` : undefined
+                }}
+              >
                 <div className="race-poster-content">
                   <div className="race-round">Round {race.round_number}</div>
                   <div className="race-poster-title">{race.name.replace(' Grand Prix', '')}</div>
@@ -123,7 +131,7 @@ const SeasonPage = () => {
               <div className="race-info">
                 <div className="race-name">{race.name}</div>
                 <div className="race-location">{race.location}</div>
-                <div className="race-date">{new Date(race.date).toLocaleDateString('en-US', { 
+                <div className="race-date">{new Date(race.date + 'T12:00:00').toLocaleDateString('en-US', { 
                   month: 'short', 
                   day: 'numeric' 
                 })}</div>

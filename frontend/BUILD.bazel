@@ -1,0 +1,73 @@
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_binary")
+load("@npm//@bazel/typescript:index.bzl", "ts_project")
+
+# TypeScript compilation
+ts_project(
+    name = "frontend_ts",
+    srcs = glob([
+        "src/**/*.ts",
+        "src/**/*.tsx",
+    ]),
+    declaration = True,
+    tsconfig = "//:tsconfig.json",
+    deps = [
+        "@npm//@types/react",
+        "@npm//@types/react-dom",
+        "@npm//@types/react-router-dom",
+        "@npm//react",
+        "@npm//react-dom",
+        "@npm//react-router-dom",
+        "@npm//axios",
+    ],
+)
+
+# Vite build
+nodejs_binary(
+    name = "build",
+    data = [
+        ":frontend_ts",
+        "index.html",
+        "package.json",
+        "tsconfig.json",
+        "tsconfig.app.json",
+        "tsconfig.node.json",
+        "vite.config.ts",
+        "@npm//vite",
+        "@npm//@vitejs/plugin-react",
+    ] + glob([
+        "public/**/*",
+        "src/**/*",
+    ]),
+    entry_point = "@npm//:node_modules/vite/bin/vite.js",
+    args = ["build"],
+    visibility = ["//visibility:public"],
+)
+
+# Vite dev server
+nodejs_binary(
+    name = "dev",
+    data = [
+        ":frontend_ts",
+        "index.html",
+        "package.json",
+        "tsconfig.json",
+        "tsconfig.app.json", 
+        "tsconfig.node.json",
+        "vite.config.ts",
+        "@npm//vite",
+        "@npm//@vitejs/plugin-react",
+    ] + glob([
+        "public/**/*",
+        "src/**/*",
+    ]),
+    entry_point = "@npm//:node_modules/vite/bin/vite.js",
+    args = ["--host", "0.0.0.0", "--port", "5173"],
+    visibility = ["//visibility:public"],
+)
+
+# Built frontend assets
+filegroup(
+    name = "dist",
+    srcs = [":build"],
+    visibility = ["//visibility:public"],
+)

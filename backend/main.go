@@ -18,28 +18,31 @@ type Season struct {
 }
 
 type Race struct {
-	ID           uint    `json:"id" gorm:"primaryKey"`
-	SeasonID     uint    `json:"season_id"`
-	Season       Season  `json:"season" gorm:"foreignKey:SeasonID"`
-	Name         string  `json:"name"`
-	Location     string  `json:"location"`
-	Date         string  `json:"date"`
-	RoundNumber  int     `json:"round_number"`
-	CircuitName  string  `json:"circuit_name"`
-	Winner       string  `json:"winner"`
-	PosterURL    string  `json:"poster_url"`
-	AverageRating float64 `json:"average_rating"`
-	ReviewCount  int     `json:"review_count"`
+	ID               uint    `json:"id" gorm:"primaryKey"`
+	SeasonID         uint    `json:"season_id"`
+	Season           Season  `json:"season" gorm:"foreignKey:SeasonID"`
+	Name             string  `json:"name"`
+	Location         string  `json:"location"`
+	Date             string  `json:"date"`
+	RoundNumber      int     `json:"round_number"`
+	CircuitName      string  `json:"circuit_name"`
+	Winner           string  `json:"winner"`
+	WinningConstructor string  `json:"winning_constructor"`
+	SecondPlace      string  `json:"second_place"`
+	ThirdPlace       string  `json:"third_place"`
+	PosterURL        string  `json:"poster_url"`
+	AverageRating    float64 `json:"average_rating"`
+	ReviewCount      int     `json:"review_count"`
 }
 
 type Review struct {
-	ID        uint   `json:"id" gorm:"primaryKey"`
-	RaceID    uint   `json:"race_id"`
-	Race      Race   `json:"race" gorm:"foreignKey:RaceID"`
-	UserName  string `json:"user_name"`
-	Rating    int    `json:"rating"`
-	Comment   string `json:"comment"`
-	CreatedAt string `json:"created_at"`
+	ID        uint    `json:"id" gorm:"primaryKey"`
+	RaceID    uint    `json:"race_id"`
+	Race      Race    `json:"race" gorm:"foreignKey:RaceID"`
+	UserName  string  `json:"user_name"`
+	Rating    float64 `json:"rating"`
+	Comment   string  `json:"comment"`
+	CreatedAt string  `json:"created_at"`
 }
 
 var db *gorm.DB
@@ -47,17 +50,28 @@ var db *gorm.DB
 func main() {
 	var err error
 	
+	log.Println("Starting F1 Letterboxd server...")
+	
 	// Database connection - use SQLite for development
+	log.Println("Connecting to database...")
 	db, err = gorm.Open(sqlite.Open("f1_letterboxd.db"), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
+	log.Println("Database connected successfully")
 
 	// Auto-migrate schemas
-	db.AutoMigrate(&Season{}, &Race{}, &Review{})
+	log.Println("Running database migrations...")
+	err = db.AutoMigrate(&Season{}, &Race{}, &Review{})
+	if err != nil {
+		log.Fatal("Failed to migrate database:", err)
+	}
+	log.Println("Database migrations completed")
 
 	// Seed data
+	log.Println("Seeding database...")
 	seedData(db)
+	log.Println("Database seeding completed")
 
 	router := gin.Default()
 
@@ -75,6 +89,11 @@ func main() {
 		c.Next()
 	})
 
+	// Health check endpoint
+	router.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	})
+
 	// API routes
 	api := router.Group("/api")
 	{
@@ -85,8 +104,12 @@ func main() {
 		api.POST("/races/:id/reviews", createReview)
 	}
 
-	log.Println("Server starting on :8080")
-	router.Run(":8080")
+	port := ":8080"
+	log.Printf("Server starting on %s", port)
+	log.Printf("Database file: f1_letterboxd.db")
+	if err := router.Run(port); err != nil {
+		log.Fatal("Failed to start server:", err)
+	}
 }
 
 func getSeasons(c *gin.Context) {
@@ -99,7 +122,15 @@ func getRacesByYear(c *gin.Context) {
 	year := c.Param("year")
 	var races []Race
 	
-	db.Joins("Season").Where("seasons.year = ?", year).Order("round_number").Find(&races)
+	// First get the season by year
+	var season Season
+	if err := db.Where("year = ?", year).First(&season).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Season not found"})
+		return
+	}
+	
+	// Then get races for that season
+	db.Where("season_id = ?", season.ID).Preload("Season").Order("round_number").Find(&races)
 	c.JSON(http.StatusOK, races)
 }
 
@@ -129,6 +160,18 @@ func createReview(c *gin.Context) {
 	
 	if err := c.ShouldBindJSON(&review); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
+	// Validate rating is between 0.5 and 5.0 in 0.5 increments
+	if review.Rating < 0.5 || review.Rating > 5.0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Rating must be between 0.5 and 5.0"})
+		return
+	}
+	
+	// Check if rating is in 0.5 increments
+	if (review.Rating * 2) != float64(int(review.Rating * 2)) {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Rating must be in 0.5 increments (e.g., 1.0, 1.5, 2.0, etc.)"})
 		return
 	}
 	

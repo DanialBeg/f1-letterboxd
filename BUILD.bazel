@@ -1,0 +1,22 @@
+load("@bazel_gazelle//:def.bzl", "gazelle")
+
+# gazelle:prefix github.com/danialbeg/f1-letterboxd
+gazelle(name = "gazelle")
+
+# Build all services
+alias(
+    name = "all",
+    actual = select({
+        "@bazel_tools//src/conditions:darwin": "//backend:server",
+        "@bazel_tools//src/conditions:linux_x86_64": "//backend:server",
+        "//conditions:default": "//backend:server",
+    }),
+)
+
+# Test all services
+test_suite(
+    name = "all_tests",
+    tests = [
+        "//e2e:integration_tests",
+    ],
+)

@@ -1,0 +1,15 @@
+# Simple shell script to run e2e tests
+sh_test(
+    name = "integration_tests",
+    srcs = ["run_e2e_tests.sh"],
+    data = [
+        "package.json",
+        "package-lock.json",
+        "playwright.config.ts",
+    ] + glob([
+        "tests/**/*.ts",
+        "tests/**/*.spec.ts",
+    ]),
+    tags = ["integration"],
+    visibility = ["//visibility:public"],
+)
