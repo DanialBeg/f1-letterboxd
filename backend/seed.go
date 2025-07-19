@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"gorm.io/gorm"
@@ -23,12 +24,13 @@ func seedData(db *gorm.DB) {
 
 	log.Println("No existing data found, proceeding with seeding...")
 
-	// Create seasons
-	seasons := []Season{
-		{Year: 2024, Name: "2024 Formula 1 World Championship"},
-		{Year: 2023, Name: "2023 Formula 1 World Championship"},
-		{Year: 2022, Name: "2022 Formula 1 World Championship"},
-		{Year: 2021, Name: "2021 Formula 1 World Championship"},
+	// Create all F1 seasons from 1950-2025
+	seasons := []Season{}
+	for year := 2025; year >= 1950; year-- {
+		seasons = append(seasons, Season{
+			Year: year,
+			Name: fmt.Sprintf("%d Formula 1 World Championship", year),
+		})
 	}
 
 	log.Println("Creating seasons...")
@@ -385,6 +387,149 @@ func seedData(db *gorm.DB) {
 		}
 	}
 	log.Printf("Created %d races for 2023 season", len(races2023))
+
+	// Get the 2025 season for race creation
+	log.Println("Retrieving 2025 season for race creation...")
+	var season2025 Season
+	result = db.Where("year = ?", 2025).First(&season2025)
+	if result.Error != nil {
+		log.Printf("Error retrieving 2025 season: %v", result.Error)
+		return
+	}
+
+	// Create 2025 F1 races (upcoming season - first half of calendar)
+	races2025 := []Race{
+		{
+			SeasonID:    season2025.ID,
+			Name:        "Australian Grand Prix",
+			Location:    "Melbourne, Australia",
+			Date:        "2025-03-16",
+			RoundNumber: 1,
+			CircuitName: "Albert Park Circuit",
+			Winner:      "TBD",
+			PosterURL:   "",
+		},
+		{
+			SeasonID:    season2025.ID,
+			Name:        "Chinese Grand Prix",
+			Location:    "Shanghai, China",
+			Date:        "2025-03-23",
+			RoundNumber: 2,
+			CircuitName: "Shanghai International Circuit",
+			Winner:      "TBD",
+			PosterURL:   "",
+		},
+		{
+			SeasonID:    season2025.ID,
+			Name:        "Japanese Grand Prix",
+			Location:    "Suzuka, Japan",
+			Date:        "2025-04-06",
+			RoundNumber: 3,
+			CircuitName: "Suzuka International Racing Course",
+			Winner:      "TBD",
+			PosterURL:   "",
+		},
+		{
+			SeasonID:    season2025.ID,
+			Name:        "Bahrain Grand Prix",
+			Location:    "Sakhir, Bahrain",
+			Date:        "2025-04-13",
+			RoundNumber: 4,
+			CircuitName: "Bahrain International Circuit",
+			Winner:      "TBD",
+			PosterURL:   "",
+		},
+		{
+			SeasonID:    season2025.ID,
+			Name:        "Saudi Arabian Grand Prix",
+			Location:    "Jeddah, Saudi Arabia",
+			Date:        "2025-04-20",
+			RoundNumber: 5,
+			CircuitName: "Jeddah Corniche Circuit",
+			Winner:      "TBD",
+			PosterURL:   "",
+		},
+		{
+			SeasonID:    season2025.ID,
+			Name:        "Miami Grand Prix",
+			Location:    "Miami Gardens, Florida",
+			Date:        "2025-05-04",
+			RoundNumber: 6,
+			CircuitName: "Miami International Autodrome",
+			Winner:      "TBD",
+			PosterURL:   "",
+		},
+		{
+			SeasonID:    season2025.ID,
+			Name:        "Emilia Romagna Grand Prix",
+			Location:    "Imola, Italy",
+			Date:        "2025-05-18",
+			RoundNumber: 7,
+			CircuitName: "Autodromo Enzo e Dino Ferrari",
+			Winner:      "TBD",
+			PosterURL:   "",
+		},
+		{
+			SeasonID:    season2025.ID,
+			Name:        "Monaco Grand Prix",
+			Location:    "Monte Carlo, Monaco",
+			Date:        "2025-05-25",
+			RoundNumber: 8,
+			CircuitName: "Circuit de Monaco",
+			Winner:      "TBD",
+			PosterURL:   "",
+		},
+		{
+			SeasonID:    season2025.ID,
+			Name:        "Spanish Grand Prix",
+			Location:    "Barcelona, Spain",
+			Date:        "2025-06-01",
+			RoundNumber: 9,
+			CircuitName: "Circuit de Barcelona-Catalunya",
+			Winner:      "TBD",
+			PosterURL:   "",
+		},
+		{
+			SeasonID:    season2025.ID,
+			Name:        "Canadian Grand Prix",
+			Location:    "Montreal, Canada",
+			Date:        "2025-06-15",
+			RoundNumber: 10,
+			CircuitName: "Circuit Gilles-Villeneuve",
+			Winner:      "TBD",
+			PosterURL:   "",
+		},
+		{
+			SeasonID:    season2025.ID,
+			Name:        "Austrian Grand Prix",
+			Location:    "Spielberg, Austria",
+			Date:        "2025-06-29",
+			RoundNumber: 11,
+			CircuitName: "Red Bull Ring",
+			Winner:      "TBD",
+			PosterURL:   "",
+		},
+		{
+			SeasonID:    season2025.ID,
+			Name:        "British Grand Prix",
+			Location:    "Silverstone, United Kingdom",
+			Date:        "2025-07-06",
+			RoundNumber: 12,
+			CircuitName: "Silverstone Circuit",
+			Winner:      "TBD",
+			PosterURL:   "",
+		},
+	}
+
+	log.Println("Creating 2025 races...")
+	for _, race := range races2025 {
+		result := db.Create(&race)
+		if result.Error != nil {
+			log.Printf("Error creating 2025 race %s: %v", race.Name, result.Error)
+			return
+		}
+	}
+	log.Printf("Created %d races for 2025 season", len(races2025))
 
 	log.Println("Database seeded successfully!")
 }

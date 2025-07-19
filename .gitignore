@@ -39,6 +39,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Process ID files
+*.pid
+
 # Playwright
 test-results/
 playwright-report/
