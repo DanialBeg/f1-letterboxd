@@ -11,7 +11,7 @@ interface Season {
 }
 
 const RacesPage = () => {
-  const [seasons, setSeasons] = useState<Season[]>([])
+  const [, setSeasons] = useState<Season[]>([])
   const [groupedSeasons, setGroupedSeasons] = useState<{ [decade: string]: Season[] }>({})
   const [loading, setLoading] = useState(true)
 

@@ -35,7 +35,7 @@ interface Review {
 const RacePage = () => {
   const { id } = useParams<{ id: string }>()
   const [race, setRace] = useState<Race | null>(null)
-  const [reviews, setReviews] = useState<Review[]>([])
+  const [, setReviews] = useState<Review[]>([])
   const [friendsReviews, setFriendsReviews] = useState<Review[]>([])
   const [popularReviews, setPopularReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
@@ -58,9 +58,8 @@ const RacePage = () => {
         // For now, always use prototype data to showcase the friends/likes functionality
         // In a real app, you'd extend the API to include is_friend, likes, and user_liked fields
         let allReviews = reviewsResponse.data
-        if (true) { // Always use prototype data for demo
-          // Use prototype data
-          allReviews = [
+        // Always use prototype data for demo
+        allReviews = [
             {
               id: 1,
               user_name: 'Alex',
@@ -161,8 +160,7 @@ const RacePage = () => {
               is_friend: false,
               user_liked: true
             }
-          ]
-        }
+        ]
         
         setReviews(allReviews)
         
