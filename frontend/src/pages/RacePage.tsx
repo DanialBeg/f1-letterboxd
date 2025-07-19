@@ -27,12 +27,17 @@ interface Review {
   rating: number
   comment: string
   created_at: string
+  likes: number
+  is_friend: boolean
+  user_liked: boolean
 }
 
 const RacePage = () => {
   const { id } = useParams<{ id: string }>()
   const [race, setRace] = useState<Race | null>(null)
   const [reviews, setReviews] = useState<Review[]>([])
+  const [friendsReviews, setFriendsReviews] = useState<Review[]>([])
+  const [popularReviews, setPopularReviews] = useState<Review[]>([])
   const [loading, setLoading] = useState(true)
   const [newReview, setNewReview] = useState({
     user_name: '',
@@ -49,7 +54,124 @@ const RacePage = () => {
           axios.get(`http://localhost:8080/api/races/${id}/reviews`)
         ])
         setRace(raceResponse.data)
-        setReviews(reviewsResponse.data)
+        
+        // For now, always use prototype data to showcase the friends/likes functionality
+        // In a real app, you'd extend the API to include is_friend, likes, and user_liked fields
+        let allReviews = reviewsResponse.data
+        if (true) { // Always use prototype data for demo
+          // Use prototype data
+          allReviews = [
+            {
+              id: 1,
+              user_name: 'Alex',
+              rating: 4,
+              comment: 'Great season opener! The battle between Max and Charles was intense. Loved seeing the new regulations in action.',
+              created_at: '2024-03-03T10:00:00Z',
+              likes: 12,
+              is_friend: true,
+              user_liked: false
+            },
+            {
+              id: 2,
+              user_name: 'Sarah',
+              rating: 5,
+              comment: 'Absolutely brilliant race. The strategy calls were perfect and the overtakes were spectacular. Best opener in years!',
+              created_at: '2024-03-04T15:30:00Z',
+              likes: 18,
+              is_friend: true,
+              user_liked: true
+            },
+            {
+              id: 3,
+              user_name: 'Mike',
+              rating: 3,
+              comment: 'Solid race but nothing too surprising. Expected more drama from the midfield. Still enjoyable though.',
+              created_at: '2024-03-04T09:45:00Z',
+              likes: 6,
+              is_friend: true,
+              user_liked: false
+            },
+            {
+              id: 4,
+              user_name: 'Emma',
+              rating: 4,
+              comment: 'Really impressed with the racing quality! The wheel-to-wheel action was fantastic and the DRS zones worked well.',
+              created_at: '2024-03-03T18:20:00Z',
+              likes: 14,
+              is_friend: true,
+              user_liked: true
+            },
+            {
+              id: 5,
+              user_name: 'Jordan',
+              rating: 5,
+              comment: 'What a start to the season! That battle for P3 was incredible. Can\'t wait for the next race!',
+              created_at: '2024-03-03T16:10:00Z',
+              likes: 9,
+              is_friend: true,
+              user_liked: false
+            },
+            {
+              id: 6,
+              user_name: 'RacingEnthusiast',
+              rating: 4,
+              comment: 'Amazing wheel-to-wheel action throughout the race. Best opening race in years! The new car designs really delivered.',
+              created_at: '2024-03-05T09:15:00Z',
+              likes: 45,
+              is_friend: false,
+              user_liked: false
+            },
+            {
+              id: 7,
+              user_name: 'F1Fanatic',
+              rating: 3,
+              comment: 'Good race but predictable outcome. Expected more from the midfield battles. At least the weather held up.',
+              created_at: '2024-03-05T14:20:00Z',
+              likes: 23,
+              is_friend: false,
+              user_liked: true
+            },
+            {
+              id: 8,
+              user_name: 'SpeedDemon',
+              rating: 5,
+              comment: 'Absolutely electric atmosphere! The crowd was incredible and the racing matched the energy. Pure motorsport magic.',
+              created_at: '2024-03-06T11:30:00Z',
+              likes: 67,
+              is_friend: false,
+              user_liked: false
+            },
+            {
+              id: 9,
+              user_name: 'CircuitWalker',
+              rating: 2,
+              comment: 'Disappointing race tbh. Too much following, not enough overtaking. The track layout doesn\'t help with close racing.',
+              created_at: '2024-03-06T20:15:00Z',
+              likes: 15,
+              is_friend: false,
+              user_liked: false
+            },
+            {
+              id: 10,
+              user_name: 'F1Historian',
+              rating: 4,
+              comment: 'Great technical racing with smart strategy calls. Reminded me of some classic Bahrain battles from the past.',
+              created_at: '2024-03-07T08:45:00Z',
+              likes: 31,
+              is_friend: false,
+              user_liked: true
+            }
+          ]
+        }
+        
+        setReviews(allReviews)
+        
+        // Separate friends' reviews and popular reviews
+        const friends = allReviews.filter((review: Review) => review.is_friend)
+        const others = allReviews.filter((review: Review) => !review.is_friend)
+        
+        setFriendsReviews(friends)
+        setPopularReviews(others.sort((a: Review, b: Review) => b.likes - a.likes))
       } catch (error) {
         console.error('Error fetching race data:', error)
         // Fallback data for demo
@@ -69,22 +191,112 @@ const RacePage = () => {
           review_count: 2,
           season: { year: 2024 }
         })
-        setReviews([
+        const fallbackReviews = [
           {
             id: 1,
-            user_name: 'F1Fan2024',
+            user_name: 'Alex',
             rating: 4,
-            comment: 'Great season opener! The battle between Max and Charles was intense.',
-            created_at: '2024-03-03T10:00:00Z'
+            comment: 'Great season opener! The battle between Max and Charles was intense. Loved seeing the new regulations in action.',
+            created_at: '2024-03-03T10:00:00Z',
+            likes: 12,
+            is_friend: true,
+            user_liked: false
           },
           {
             id: 2,
-            user_name: 'RacingEnthusiast',
+            user_name: 'Sarah',
             rating: 5,
-            comment: 'Absolutely brilliant race. The strategy calls were perfect and the overtakes were spectacular.',
-            created_at: '2024-03-04T15:30:00Z'
+            comment: 'Absolutely brilliant race. The strategy calls were perfect and the overtakes were spectacular. Best opener in years!',
+            created_at: '2024-03-04T15:30:00Z',
+            likes: 18,
+            is_friend: true,
+            user_liked: true
+          },
+          {
+            id: 3,
+            user_name: 'Mike',
+            rating: 3,
+            comment: 'Solid race but nothing too surprising. Expected more drama from the midfield. Still enjoyable though.',
+            created_at: '2024-03-04T09:45:00Z',
+            likes: 6,
+            is_friend: true,
+            user_liked: false
+          },
+          {
+            id: 4,
+            user_name: 'Emma',
+            rating: 4,
+            comment: 'Really impressed with the racing quality! The wheel-to-wheel action was fantastic and the DRS zones worked well.',
+            created_at: '2024-03-03T18:20:00Z',
+            likes: 14,
+            is_friend: true,
+            user_liked: true
+          },
+          {
+            id: 5,
+            user_name: 'Jordan',
+            rating: 5,
+            comment: 'What a start to the season! That battle for P3 was incredible. Can\'t wait for the next race!',
+            created_at: '2024-03-03T16:10:00Z',
+            likes: 9,
+            is_friend: true,
+            user_liked: false
+          },
+          {
+            id: 6,
+            user_name: 'RacingEnthusiast',
+            rating: 4,
+            comment: 'Amazing wheel-to-wheel action throughout the race. Best opening race in years! The new car designs really delivered.',
+            created_at: '2024-03-05T09:15:00Z',
+            likes: 45,
+            is_friend: false,
+            user_liked: false
+          },
+          {
+            id: 7,
+            user_name: 'F1Fanatic',
+            rating: 3,
+            comment: 'Good race but predictable outcome. Expected more from the midfield battles. At least the weather held up.',
+            created_at: '2024-03-05T14:20:00Z',
+            likes: 23,
+            is_friend: false,
+            user_liked: true
+          },
+          {
+            id: 8,
+            user_name: 'SpeedDemon',
+            rating: 5,
+            comment: 'Absolutely electric atmosphere! The crowd was incredible and the racing matched the energy. Pure motorsport magic.',
+            created_at: '2024-03-06T11:30:00Z',
+            likes: 67,
+            is_friend: false,
+            user_liked: false
+          },
+          {
+            id: 9,
+            user_name: 'CircuitWalker',
+            rating: 2,
+            comment: 'Disappointing race tbh. Too much following, not enough overtaking. The track layout doesn\'t help with close racing.',
+            created_at: '2024-03-06T20:15:00Z',
+            likes: 15,
+            is_friend: false,
+            user_liked: false
+          },
+          {
+            id: 10,
+            user_name: 'F1Historian',
+            rating: 4,
+            comment: 'Great technical racing with smart strategy calls. Reminded me of some classic Bahrain battles from the past.',
+            created_at: '2024-03-07T08:45:00Z',
+            likes: 31,
+            is_friend: false,
+            user_liked: true
           }
-        ])
+        ]
+        
+        setReviews(fallbackReviews)
+        setFriendsReviews(fallbackReviews.filter(review => review.is_friend))
+        setPopularReviews(fallbackReviews.filter(review => !review.is_friend).sort((a, b) => b.likes - a.likes))
       } finally {
         setLoading(false)
       }
@@ -99,10 +311,45 @@ const RacePage = () => {
       await axios.post(`http://localhost:8080/api/races/${id}/reviews`, newReview)
       // Refresh reviews
       const reviewsResponse = await axios.get(`http://localhost:8080/api/races/${id}/reviews`)
-      setReviews(reviewsResponse.data)
+      const allReviews = reviewsResponse.data
+      setReviews(allReviews)
+      
+      // Separate friends' reviews and popular reviews
+      const friends = allReviews.filter((review: Review) => review.is_friend)
+      const others = allReviews.filter((review: Review) => !review.is_friend)
+      
+      setFriendsReviews(friends)
+      setPopularReviews(others.sort((a: Review, b: Review) => b.likes - a.likes))
+      
       setNewReview({ user_name: '', rating: 0, comment: '' })
     } catch (error) {
       console.error('Error submitting review:', error)
+    }
+  }
+
+  const handleLikeToggle = async (reviewId: number) => {
+    try {
+      // In a real app, this would make an API call
+      // await axios.post(`http://localhost:8080/api/reviews/${reviewId}/like`)
+      
+      // For demo, update locally
+      const updateReviews = (reviewsList: Review[]) => 
+        reviewsList.map(review => 
+          review.id === reviewId 
+            ? { 
+                ...review, 
+                likes: review.user_liked ? review.likes - 1 : review.likes + 1,
+                user_liked: !review.user_liked 
+              }
+            : review
+        )
+      
+      setReviews(updateReviews)
+      setFriendsReviews(updateReviews)
+      setPopularReviews(prev => updateReviews(prev).sort((a, b) => b.likes - a.likes))
+      
+    } catch (error) {
+      console.error('Error toggling like:', error)
     }
   }
 
@@ -141,6 +388,32 @@ const RacePage = () => {
     }
     return dots
   }
+
+  const renderReviewCard = (review: Review) => (
+    <div key={review.id} className="review-card">
+      <div className="review-header">
+        <div className="reviewer-info">
+          <div className="reviewer-avatar">
+            {review.user_name.charAt(0).toUpperCase()}
+          </div>
+          <span className="reviewer-name">{review.user_name}</span>
+        </div>
+        <div className="review-actions">
+          <div className="review-rating">
+            {renderRatingDots(review.rating)}
+          </div>
+          <button 
+            className={`like-button ${review.user_liked ? 'liked' : ''}`}
+            onClick={() => handleLikeToggle(review.id)}
+          >
+            <span className="heart-icon">♥</span>
+            <span className="like-count">{review.likes}</span>
+          </button>
+        </div>
+      </div>
+      <div className="review-comment">{review.comment}</div>
+    </div>
+  )
 
   if (loading) {
     return <div className="loading">Loading race details...</div>
@@ -269,24 +542,25 @@ const RacePage = () => {
             </button>
           </form>
 
-          <div className="reviews-list">
-            {reviews.map((review) => (
-              <div key={review.id} className="review-card">
-                <div className="review-header">
-                  <div className="reviewer-info">
-                    <div className="reviewer-avatar">
-                      {review.user_name.charAt(0).toUpperCase()}
-                    </div>
-                    <span className="reviewer-name">{review.user_name}</span>
-                  </div>
-                  <div className="review-rating">
-                    {renderRatingDots(review.rating)}
-                  </div>
-                </div>
-                <div className="review-comment">{review.comment}</div>
+          {/* Friends' Reviews */}
+          {friendsReviews.length > 0 && (
+            <div className="reviews-subsection">
+              <h3 className="subsection-title">Reviews from friends</h3>
+              <div className="reviews-list">
+                {friendsReviews.map(renderReviewCard)}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
+
+          {/* Popular Reviews */}
+          {popularReviews.length > 0 && (
+            <div className="reviews-subsection">
+              <h3 className="subsection-title">Popular reviews</h3>
+              <div className="reviews-list">
+                {popularReviews.map(renderReviewCard)}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
